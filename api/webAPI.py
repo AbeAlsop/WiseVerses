@@ -3,7 +3,7 @@ from chat import Chatter
 from dotenv import load_dotenv
 
 load_dotenv()
-app = FastAPI()
+app = FastAPI(root_path="/api")
 chat_bot = Chatter()
 
 @app.get("/")
