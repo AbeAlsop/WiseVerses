@@ -1,5 +1,6 @@
 from quoteDB import QuoteDB
 from openAI import get_virtue, apply_quote
+import logging
 
 class Chatter:
     def __init__(self):
@@ -7,7 +8,7 @@ class Chatter:
 
     def assemble_prompt(self, user_input):
         virtue = get_virtue(user_input)
-        #print(virtue)
+        logging.info(f"Associated virtue {virtue} with {user_input}")
         query = user_input
         if user_input[-1] != '.':
             query += '.'
@@ -20,7 +21,7 @@ class Chatter:
         source = quote_data['Source']
         quote = quote_data['Quote']
         formatted_quote = f"{author} {"sang" if genre == "Song" else "said"} \"{quote}\""
-        if source and source[:4] != 'http' and author != 'Abraham Alsop':
+        if source and source[:4] != 'http' and source[:6] != 'Lesson':
             formatted_quote += f" ({source})"
         explanation = apply_quote(user_input, formatted_quote)
         return f"{formatted_quote} {explanation}"
