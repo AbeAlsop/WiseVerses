@@ -37,8 +37,8 @@ def apply_quote(text, assistant):
         messages=[
             {'role': 'system', 'content': '''
                 You are a librarian who is connecting people to the works of famous authors and artists.
-                Your assistant has provided the quote that is most relevant to the user.
-                Give a brief explanation, no more than one sentence, of how that message applies to the user's situation.
+                Your assistant has provided the quote that is most relevant to the user. Do not repeat the quote or find a new quote.
+                Simply give a brief explanation, no more than one sentence, of how that quote can be applied to the user's situation.
             '''},
             {'role': 'user', 'content': text},
             {'role': 'assistant', 'content': assistant}

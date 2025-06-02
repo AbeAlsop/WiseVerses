@@ -1,8 +1,11 @@
 # Press Shift+F10 or the play button to execute
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import logging
 
 from chat import Chatter
 
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 def dialogue():
     chat_bot = Chatter()
