@@ -1,7 +1,115 @@
-<h1>Wise Verses</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Wise Verses</title>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <h1>Responsive Layout</h1>
+    </header>
 
-<ul>
-<li><a href="mercy/mercy.html">Merciful Mysteries</a></li>
-<li><a href="bible.html">Top 20 Bible verses not read at Mass</a></li>
-<li>More Coming Soon</li>
-</ul>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <a href="index.html" class="menu-item">Chat with Philosophers</a>
+                <a href="mercy/mercy.html" class="menu-item">Merciful Mysteries</a>
+                <a href="bible.html" class="menu-item">Little-Known Bible Verses</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-card">
+                <h2>Ask a Philosopher</h2>
+                <p>What would you like to ponder today?</p>
+
+                <div class="question-form">
+                    <input type="text" id="questionInput" placeholder="Type your question here..." class="question-input">
+                    <button type="button" id="submitBtn" class="submit-btn">Submit</button>
+                </div>
+
+                <div id="response" class="response-area" style="display: none;">
+                    <h3>Response:</h3>
+                    <p id="responseText"></p>
+                </div>
+        </main>
+    </div>
+
+    <script>
+        // Get elements
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            hamburger.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Event listeners
+        hamburger.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking menu items on mobile
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                hamburger.classList.remove('active');
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+
+        // Question form functionality
+        const questionInput = document.getElementById('questionInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const responseArea = document.getElementById('response');
+        const responseText = document.getElementById('responseText');
+
+        function submitQuestion() {
+            const question = questionInput.value.trim();
+            if (question) {
+                // Show response area
+                responseArea.style.display = 'block';
+                responseText.textContent = `You asked: "${question}". This is where the response would appear.`;
+
+                // Clear input
+                questionInput.value = '';
+            }
+        }
+
+        // Event listeners for question form
+        submitBtn.addEventListener('click', submitQuestion);
+        questionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
