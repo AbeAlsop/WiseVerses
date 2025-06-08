@@ -151,7 +151,6 @@ body {
 
 /* Question Form Styles */
 .question-form {
-    margin: 2rem 0;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -194,7 +193,6 @@ body {
 }
 
 .response-area {
-    margin-top: 2rem;
     padding: 1.5rem;
     background: #f8f9fa;
     border-radius: 8px;
@@ -204,6 +202,48 @@ body {
 .response-area h3 {
     color: #495057;
     margin-bottom: 0.5rem;
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #667eea;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e9ecef;
+    border-top: 2px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.submit-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.error-message {
+    color: #dc3545;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
 }
 
 /* Overlay for mobile */
