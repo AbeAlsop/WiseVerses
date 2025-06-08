@@ -34,22 +34,24 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="content-card">
-                <h2>Ask a Philosopher</h2>
-                <p>What would you like to ponder today?</p>
-
+                <h2>Ask a Wise Person</h2>
+            </div>
+            <div class="content-card" id="questionCard">
                 <div class="question-form">
-                    <input type="text" id="questionInput" placeholder="Type your question here..." class="question-input">
-                    <button type="button" id="submitBtn" class="submit-btn">Submit</button>
+                    <input type="text" id="questionInput" placeholder="What would you like to ponder?" class="question-input">
+                    <button type="button" id="submitBtn" class="submit-btn">Ask</button>
                 </div>
 
-                <div id="response" class="response-area" style="display: none;">
-                    <h3>Response:</h3>
+                <div id="response" style="display: none;margin-top: 2rem;">
                     <p id="responseText"></p>
                 </div>
+            </div>
         </main>
     </div>
 
     <script>
+        var session = Math.random().toString(36).substr(2,9);
+
         // Get elements
         const hamburger = document.getElementById('hamburger');
         const sidebar = document.getElementById('sidebar');
@@ -90,16 +92,45 @@
         const submitBtn = document.getElementById('submitBtn');
         const responseArea = document.getElementById('response');
         const responseText = document.getElementById('responseText');
+        const questionCard = document.getElementById('questionCard');
 
-        function submitQuestion() {
+        const apiURL = "http://127.0.0.1:8000/api/response";
+
+        function displayResponse(question, quote, explanation) {
+            questionInput.value = '';
+            newCard = '<div class="content-card" id="question-card"><div class="response-area">'
+            newCard += '<p><b>'+question+'</b></p>'
+            newCard += '<p>'+quote+'</p>'
+            newCard += '<p>'+explanation+'</p>'
+            newCard += '</div></div>'
+            questionCard.insertAdjacentHTML('beforebegin', newCard);
+            responseText.innerHTML = "";
+        }
+
+        async function submitQuestion() {
             const question = questionInput.value.trim();
-            if (question) {
-                // Show response area
-                responseArea.style.display = 'block';
-                responseText.textContent = `You asked: "${question}". This is where the response would appear.`;
+            if (!question) return;
 
-                // Clear input
-                questionInput.value = '';
+            // Disable submit button and show response area
+            submitBtn.disabled = true;
+            responseArea.style.display = 'block';
+            responseText.innerHTML = '<div class="loading"><div class="spinner"><div></div>';
+
+            try {
+                const response = await fetch(apiURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({session: session, message: question})
+                });
+                const data = await response.json();
+                displayResponse(questionInput.value, data.FormattedQuote, data.Explanation);
+            } catch (error) {
+                console.error(error);
+                responseText.innerHTML = "Error when querying WiseVerses API" + error
+            } finally {
+                submitBtn.disabled = false;
             }
         }
 

@@ -1,8 +1,11 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from chat import Chatter
 from dotenv import load_dotenv
 import logging
 import os
+from pydantic import BaseModel
 
 load_dotenv()
 log_file_path = os.getenv('LOG_FILE_PATH')
@@ -16,8 +19,17 @@ if log_file_path:
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 app = FastAPI(root_path="/api")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"]
+)
 
 chat_bot = Chatter()
+
+class ChatMessage(BaseModel):
+    session: str
+    message: str
 
 @app.get("/")
 def read_root():
@@ -28,3 +40,9 @@ def read_response(q: str):
     response = chat_bot.respond(q)
     logging.info(f"Received query: {q} | Responding: {response}")
     return {"Response": response}
+
+@app.post("/response")
+def post_response(prompt: ChatMessage):
+    response = chat_bot.respond_with_context(prompt.message, prompt.session)
+    logging.info(f"Session: {prompt.session} | Received query: {prompt.message} | Quote: {response['Quote']} | Explanation: {response['Explanation']}")
+    return response
