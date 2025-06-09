@@ -37,7 +37,7 @@ def read_root():
 
 @app.get("/response")
 def read_response(q: str):
-    response = chat_bot.respond(q)
+    response = chat_bot.respond_with_context(q, "global")
     logging.info(f"Received query: {q} | Responding: {response}")
     return {"Response": response}
 
