@@ -8,14 +8,14 @@ class Chatter:
     def __init__(self):
         self.quote_db = QuoteDB()
 
-    def assemble_prompt(self, user_input, session=None):
-        user_context = self.context[session] if session and session in self.context else []
+    #TODO: Find closest match from my descriptions of virtues, rather than asking OpenAI
+    def assemble_prompt(self, user_input, user_context):
         virtue = get_virtue(user_input, user_context)
         logging.info(f"Associated virtue {virtue} with {user_input}")
         query = user_input
         if user_input[-1] != '.':
             query += '.'
-        query += f"Seeking {virtue.replace(',' , ' or ')}."
+        query += f" Seeking {virtue.replace(',' , ' or ')}."
         return query
 
     def format_quote(self, quote_data):
@@ -33,19 +33,13 @@ class Chatter:
         explanation = apply_quote(user_input, formatted_quote)
         return f"{formatted_quote} {explanation}"
 
-    def respond(self, user_input):
-        prompt = self.assemble_prompt(user_input)
-        db_response = self.quote_db.lookup_quote(prompt)['matches'][0]
-        quote_data = db_response['metadata']
-        return self.assemble_response(user_input, quote_data)
-
     def respond_with_context(self, user_input, session):
-        prompt = self.assemble_prompt(user_input, session)
-        db_response = self.quote_db.lookup_quote(prompt)['matches'][0]
-        quote_data = db_response['metadata']
-        formatted_quote = self.format_quote(quote_data)
         user_context = self.context[session] if session in self.context else []
+
+        prompt = self.assemble_prompt(user_input, user_context)
+        quote_data = self.quote_db.lookup_quote(prompt, session)
+        formatted_quote = self.format_quote(quote_data)
+
         explanation = apply_quote(user_input, formatted_quote, user_context)
-        new_history = [user_input, f"{formatted_quote} {explanation}"]
-        self.context[session] = [*user_context, new_history]
+        self.context[session] = [*user_context, [user_input, f"{formatted_quote} {explanation}"]]
         return {**quote_data, "FormattedQuote": formatted_quote, "Explanation": explanation}

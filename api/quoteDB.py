@@ -72,8 +72,8 @@ class QuoteDB:
         # self.save_quotes_csv(quote_data)
         self.create_index(quote_data)
 
-    #TODO: Avoid repeats within the same conversation
-    def lookup_quote(self, prompt):
+    #TODO: Allow some variablility, and avoid duplicates within the same session
+    def lookup_quote(self, prompt, session):
         embedding = embed([prompt])[0].embedding
         result = self.index.query(vector=[embedding], top_k=1, include_metadata=True)
-        return result
+        return result['matches'][0]['metadata']

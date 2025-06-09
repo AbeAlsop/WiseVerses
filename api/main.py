@@ -9,12 +9,13 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 def dialogue():
     chat_bot = Chatter()
+    context = "console"
     print("What's up?")
     while True:
         user_input = input()
         if user_input == "exit" or user_input == "quit":
             break
-        response = chat_bot.respond(user_input)
+        response = chat_bot.respond_with_context(user_input, context)
         print(response)
 
 
