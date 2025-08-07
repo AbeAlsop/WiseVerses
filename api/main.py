@@ -3,6 +3,7 @@
 import logging
 
 from chat import Chatter
+from quoteDB import QuoteDB
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -15,8 +16,13 @@ def dialogue():
         user_input = input()
         if user_input == "exit" or user_input == "quit":
             break
-        response = chat_bot.respond_with_context(user_input, context)
-        print(response)
+        elif user_input == "rebuild":
+            db = QuoteDB()
+            db.rebuild_db()
+            print("Database reloaded")
+        else:
+            response = chat_bot.respond_with_context(user_input, context)
+            print(response)
 
 
 if __name__ == '__main__':
