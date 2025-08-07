@@ -50,6 +50,9 @@
 
     <script>
         var session = Math.random().toString(36).substr(2,9);
+        window.onload = function() {
+            document.getElementById("questionInput").focus();
+        }
 
         // Get elements
         const hamburger = document.getElementById('hamburger');
@@ -96,12 +99,14 @@
         // LOCAL TEST
         //const apiURL = "http://127.0.0.1:8000/api/response";
 
-        function displayResponse(question, quote, explanation) {
+        function displayResponse(question, quotes, explanation) {
             questionInput.value = '';
             questionInput.placeholder = 'What else?'
             newCard = '<div class="content-card" id="question-card"><div class="response-area">'
             newCard += '<p><b>'+question+'</b></p>'
-            newCard += '<p>'+quote+'</p>'
+            quotes.forEach(function(q) {
+                newCard += '<p>'+q+'</p>'
+            })
             newCard += '<p>'+explanation+'</p>'
             newCard += '</div></div>'
             questionCard.insertAdjacentHTML('beforebegin', newCard);
@@ -122,7 +127,7 @@
                     body: JSON.stringify({session: session, message: question})
                 });
                 const data = await response.json();
-                displayResponse(questionInput.value, data.FormattedQuote, data.Explanation);
+                displayResponse(questionInput.value, [data.FormattedQuote, data.FormattedQuote2], data.Explanation);
             } catch (error) {
                 console.error(error);
                 responseStatus.innerHTML = "Error when querying WiseVerses API" + error

@@ -44,5 +44,6 @@ def read_response(q: str):
 @app.post("/response")
 def post_response(prompt: ChatMessage):
     response = chat_bot.respond_with_context(prompt.message, prompt.session)
-    logging.info(f"Session: {prompt.session} | Received query: {prompt.message} | Quote: {response['Quote']} | Explanation: {response['Explanation']}")
+    quotes = " ".join([q['Quote'] for q in response['Quotes']])
+    logging.info(f"Session: {prompt.session} | Received query: {prompt.message} | Quotes: {quotes} | Explanation: {response['Explanation']}")
     return response

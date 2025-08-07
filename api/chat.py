@@ -8,15 +8,17 @@ class Chatter:
     def __init__(self):
         self.quote_db = QuoteDB()
 
-    #TODO: Find closest match from my descriptions of virtues, rather than asking OpenAI
-    def assemble_prompt(self, user_input, user_context):
-        virtue = get_virtue(user_input, user_context)
-        logging.info(f"Associated virtue {virtue} with {user_input}")
+    def append_virtue(self, user_input, virtue):
         query = user_input
         if user_input[-1] != '.':
             query += '.'
         query += f" Seeking {virtue.replace(',' , ' or ')}."
         return query
+
+    def assemble_prompt(self, user_input, user_context):
+        virtue = get_virtue(user_input, user_context)
+        logging.info(f"Associated virtue {virtue} with {user_input}")
+        return self.append_virtue(user_input, virtue)
 
     def format_quote(self, quote_data):
         author = quote_data['Author']
@@ -28,18 +30,17 @@ class Chatter:
             formatted_quote += f" ({source})"
         return formatted_quote
 
-    def assemble_response(self, user_input, quote_data):
-        formatted_quote = self.format_quote(quote_data)
-        explanation = apply_quote(user_input, formatted_quote)
-        return f"{formatted_quote} {explanation}"
-
+    # TODO: Detect when the input is too short to be a coherent thought, and respond with something like "Tell me more"
     def respond_with_context(self, user_input, session):
         user_context = self.context[session] if session in self.context else []
 
         prompt = self.assemble_prompt(user_input, user_context)
-        quote_data = self.quote_db.lookup_quote(prompt, session)
-        formatted_quote = self.format_quote(quote_data)
+        pop_quote_data = self.quote_db.lookup_quote(prompt, session, "pop")
+        pop_formatted_quote = self.format_quote(pop_quote_data)
 
-        explanation = apply_quote(user_input, formatted_quote, user_context)
-        self.context[session] = [*user_context, [user_input, f"{formatted_quote} {explanation}"]]
-        return {**quote_data, "FormattedQuote": formatted_quote, "Explanation": explanation}
+        faith_quote_data = self.quote_db.lookup_quote(prompt, session, "faith")
+        faith_formatted_quote = self.format_quote(faith_quote_data)
+
+        explanation = apply_quote(user_input, [pop_formatted_quote, faith_formatted_quote], user_context)
+        self.context[session] = [*user_context, [user_input, f"{pop_formatted_quote} {faith_formatted_quote} {explanation}"]]
+        return {"Quotes": [pop_quote_data, faith_quote_data], "FormattedQuote": pop_formatted_quote, "FormattedQuote2": faith_formatted_quote, "Explanation": explanation}
