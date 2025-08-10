@@ -44,3 +44,7 @@ class Chatter:
         explanation = apply_quote(user_input, [pop_formatted_quote, faith_formatted_quote], user_context)
         self.context[session] = [*user_context, [user_input, f"{pop_formatted_quote} {faith_formatted_quote} {explanation}"]]
         return {"Quotes": [pop_quote_data, faith_quote_data], "FormattedQuote": pop_formatted_quote, "FormattedQuote2": faith_formatted_quote, "Explanation": explanation}
+
+    def find_song(self, user_input):
+        song_data = self.quote_db.lookup_quote_in_genre(user_input, "Song")
+        return song_data
