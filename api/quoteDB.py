@@ -16,7 +16,7 @@ COMBINED_INDEX_NAME = "wise-quotes-3"
 POP_INDEX_NAME = "wise-quotes-pop-3"
 FAITH_INDEX_NAME = "wise-quotes-faith-3"
 FAITH_GENRES = ["Saint","Bible","Christian","Song"]
-MIN_ID_TO_LOAD = 2129
+MIN_ID_TO_LOAD = 2130
 
 pinecone_client = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 pinecone_spec = ServerlessSpec(cloud="aws", region=AWS_REGION)
@@ -100,3 +100,8 @@ class QuoteDB:
 
     def lookup_faith_quote(self, prompt):
         return self.find_first_match(prompt, self.faith_index)
+
+    def lookup_quote_in_genre(self, prompt, genre):
+        embedding = embed([prompt])[0].embedding
+        result = self.combined_index.query(vector=[embedding], top_k=1, include_metadata=True, filter={"Genre": {"$eq": genre}})
+        return result['matches'][0]

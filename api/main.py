@@ -3,7 +3,6 @@
 import logging
 
 from chat import Chatter
-from quoteDB import QuoteDB
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -17,11 +16,11 @@ def dialogue():
         if user_input == "/exit" or user_input == "/quit":
             break
         elif user_input == "/load":
-            db = QuoteDB()
-            db.load_db()
+            chat_bot.quote_db.load_db()
             print("Quotes loaded")
         else:
             response = chat_bot.respond_with_context(user_input, context)
+            #response = chat_bot.find_song(user_input)
             print(response)
 
 
