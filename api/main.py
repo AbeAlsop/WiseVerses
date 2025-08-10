@@ -14,12 +14,12 @@ def dialogue():
     print("What's up?")
     while True:
         user_input = input()
-        if user_input == "exit" or user_input == "quit":
+        if user_input == "/exit" or user_input == "/quit":
             break
-        elif user_input == "rebuild":
+        elif user_input == "/load":
             db = QuoteDB()
-            db.rebuild_db()
-            print("Database reloaded")
+            db.load_db()
+            print("Quotes loaded")
         else:
             response = chat_bot.respond_with_context(user_input, context)
             print(response)

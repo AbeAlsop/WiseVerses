@@ -12,7 +12,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 AWS_REGION = "us-east-1"
-OLD_INDEX_NAME = "wise-quotes-2"
 COMBINED_INDEX_NAME = "wise-quotes-3"
 POP_INDEX_NAME = "wise-quotes-pop-3"
 FAITH_INDEX_NAME = "wise-quotes-faith-3"
@@ -24,7 +23,6 @@ pinecone_spec = ServerlessSpec(cloud="aws", region=AWS_REGION)
 
 class QuoteDB:
     def __init__(self):
-        self.old_index = self.get_or_create_index(OLD_INDEX_NAME)
         self.pop_index = self.get_or_create_index(POP_INDEX_NAME)
         self.faith_index = self.get_or_create_index(FAITH_INDEX_NAME)
         self.combined_index = self.get_or_create_index(COMBINED_INDEX_NAME)
@@ -74,7 +72,7 @@ class QuoteDB:
                 index.upsert(vectors)
         print(f"Added {len(quotes)} quotes to database")
 
-    def rebuild_db(self):
+    def load_db(self):
         quote_data = self.load_quotes()
         # self.save_quotes_csv(quote_data)
         self.add_quotes_to_indexes(
