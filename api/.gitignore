@@ -1,0 +1,4 @@
+.env
+__pycache__
+wiseverses-venv
+gunicorn_conf.py
