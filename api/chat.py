@@ -1,12 +1,17 @@
 from quoteDB import QuoteDB
 from openAI import get_virtue, apply_quote
 import logging
+import cachetools
+
+class History:
+    quote_ids: list = []
+    messages: list = []
 
 class Chatter:
-    context = {}
-
     def __init__(self):
         self.quote_db = QuoteDB()
+        #Support 100 concurrent sessions up to 1 day
+        self.context = cachetools.TTLCache(maxsize=100, ttl=60 * 60 * 24)
 
     def append_virtue(self, user_input, virtue):
         query = user_input
@@ -30,19 +35,22 @@ class Chatter:
             formatted_quote += f" ({source})"
         return formatted_quote
 
-    # TODO: Detect when the input is too short to be a coherent thought, and respond with something like "Tell me more"
     def respond_with_context(self, user_input, session):
-        user_context = self.context[session] if session in self.context else []
+        user_context = self.context.setdefault(session,History())
 
-        prompt = self.assemble_prompt(user_input, user_context)
-        pop_quote_data = self.quote_db.lookup_quote(prompt, session, "pop")
+        prompt = self.assemble_prompt(user_input, user_context.messages)
+        pop_quote_data = self.quote_db.lookup_quote_data(prompt, "pop", user_context.quote_ids)
         pop_formatted_quote = self.format_quote(pop_quote_data)
 
-        faith_quote_data = self.quote_db.lookup_quote(prompt, session, "faith")
+        faith_quote_data = self.quote_db.lookup_quote_data(prompt, "faith", user_context.quote_ids)
         faith_formatted_quote = self.format_quote(faith_quote_data)
 
-        explanation = apply_quote(user_input, [pop_formatted_quote, faith_formatted_quote], user_context)
-        self.context[session] = [*user_context, [user_input, f"{pop_formatted_quote} {faith_formatted_quote} {explanation}"]]
+        explanation = apply_quote(user_input, [pop_formatted_quote, faith_formatted_quote], user_context.messages)
+
+        user_context.quote_ids.append(pop_quote_data["ID"])
+        user_context.quote_ids.append(faith_quote_data["ID"])
+        user_context.messages.append([user_input, f"{pop_formatted_quote} {faith_formatted_quote} {explanation}"])
+
         return {"Quotes": [pop_quote_data, faith_quote_data], "FormattedQuote": pop_formatted_quote, "FormattedQuote2": faith_formatted_quote, "Explanation": explanation}
 
     def find_song(self, user_input):

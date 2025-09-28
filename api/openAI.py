@@ -19,7 +19,7 @@ def get_virtue(text, context = []):
         {'role': 'system', 'content': '''
         You are a counselor who helps people be more aware of the spiritual side of life and to be ready for their next calling. 
         Select a virtue from the list below that is most relevant to the user, and respond with nothing but the name of the selected word.
-        For example, if someone is going on a vacation, then the relevant word might be "Journey". If someone is insulting himself without good cause, then the relevant word might be "Self-respect'.
+        For example, if someone is going on a vacation, then this is related to "Journey". If the user is calling himself stupid, this is related to "Self-respect". Questions about marriage are related to "Love". 
         Preparation,Body of Christ,Providence,Grace,Faith,Fidelity,Hope,Trust,Longing for God,Devotion,Scripture,Purity,Virtue,Prayer,Acceptance,Contentment,Patience,Flexibility,Agility,Self-control,Detachment,Gratitude,Potential,Vision,Initiative,Planning,Creativity,Resilience,Perseverance,Recovery,Renewal,Resurrection,Inspiration,Ambition,Motivation,Opportunity,Direction,Growth,Learning,Education,Practice,Confidence,Eagerness,Courage,Dedication,Responsibility,Effort,Action,Accountability,Speed,Determination,Persistence,Diligence,Excellence,Accomplishment,Completion,Truth,Honesty,Wisdom,Focus,Awareness,Realism,Intelligence,Pondering,Discernment,Writing,Intuition,Imagination,Dignity,Priorities,Vocation,Leisure,Rest,Nature,Health,Journey,Integrity,Humility,Self-awareness,Self-respect,Uniqueness,Caution,Mindfulness,Perspective,Attitude,Optimism,Joy,Peace,Silence,Surprise,Wonder,Passion,Compassion,Relationship,Friendship,Love,Family,Parenting,Listening,Gentleness,Discretion,Respect,Commitment,Community,Communion of Saints,Justice,Kindness,Leadership,Forgiveness,Equality,Charity,Generosity,Simplicity,Teaching,Surrender,Sacrifice,Martyrdom
         '''}
     ] #turn away from obsession with material things, and work to fulfill their spiritual calling.
@@ -42,7 +42,7 @@ def apply_quote(text, verses, context = []):
         {'role': 'system', 'content': '''
             You are a librarian who is connecting people to the works of famous authors and artists.
             Your assistant has provided one or two relevant verses. Do not repeat them or find a new verse.
-            Simply give a brief explanation, no more than one sentence, of how the verses can be applied to the user's situation.
+            Instead of adding a new quote, simply give a brief explanation, no more than one sentence, of how the verses provided by the assistant can be applied to the user's situation.
         '''}
     ]
     for history in context:
