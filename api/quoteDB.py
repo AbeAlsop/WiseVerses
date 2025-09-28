@@ -16,7 +16,7 @@ COMBINED_INDEX_NAME = "wise-quotes-3"
 POP_INDEX_NAME = "wise-quotes-pop-3"
 FAITH_INDEX_NAME = "wise-quotes-faith-3"
 FAITH_GENRES = ["Saint","Bible","Christian","Song"]
-MIN_ID_TO_LOAD = 2130
+MIN_ID_TO_LOAD = 2142
 
 pinecone_client = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 pinecone_spec = ServerlessSpec(cloud="aws", region=AWS_REGION)
@@ -70,7 +70,6 @@ class QuoteDB:
             vectors = list(zip(ids, embeds, quote_batch))
             for index in indexes:
                 index.upsert(vectors)
-        print(f"Added {len(quotes)} quotes to database")
 
     def load_db(self):
         quote_data = self.load_quotes()
@@ -84,22 +83,21 @@ class QuoteDB:
             [self.combined_index,self.faith_index]
         )
 
-    def find_first_match(self, prompt, index):
+    def find_match(self, prompt, index, avoid_ids=[]):
         embedding = embed([prompt])[0].embedding
-        result = index.query(vector=[embedding], top_k=1, include_metadata=True)
+        result = index.query(vector=[embedding], top_k=1, include_metadata=True, filter={"ID": {"$nin": avoid_ids}})
         return result['matches'][0]
 
-    #TODO: Allow some variablility, and avoid duplicates within the same session
-    def lookup_quote(self, prompt, session, style=""):
+    def lookup_quote_data(self, prompt, style="", avoid_ids=[]):
         selected_index = self.pop_index if style=="pop" else self.faith_index if style=="faith" else self.combined_index
-        first_match = self.find_first_match(prompt, selected_index)
+        first_match = self.find_match(prompt, selected_index, avoid_ids)
         return first_match['metadata']
 
     def lookup_pop_quote(self, prompt):
-        return self.find_first_match(prompt, self.pop_index)
+        return self.find_match(prompt, self.pop_index)
 
     def lookup_faith_quote(self, prompt):
-        return self.find_first_match(prompt, self.faith_index)
+        return self.find_match(prompt, self.faith_index)
 
     def lookup_quote_in_genre(self, prompt, genre):
         embedding = embed([prompt])[0].embedding

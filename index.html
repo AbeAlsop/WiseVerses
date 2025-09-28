@@ -101,21 +101,33 @@
 
         function displayResponse(question, quotes, explanation) {
             questionInput.value = '';
-            questionInput.placeholder = 'What else?'
-            newCard = '<div class="content-card" id="question-card"><div class="response-area">'
-            newCard += '<p><b>'+question+'</b></p>'
-            quotes.forEach(function(q) {
-                newCard += '<p>'+q+'</p>'
-            })
+            newCard = '<div class="content-card"><div class="response-area">'
+            if (question.length > 0)
+                newCard += '<p><b>'+question+'</b></p>'
+            if (quotes.length > 0) {
+                questionInput.placeholder = 'What else?'
+                quotes.forEach(function(q) {
+                    newCard += '<p>'+q+'</p>'
+                })
+            }
             newCard += '<p>'+explanation+'</p>'
             newCard += '</div></div>'
             questionCard.insertAdjacentHTML('beforebegin', newCard);
             responseStatus.innerHTML = "";
+            questionInput.scrollIntoView();
+        }
+
+        function isLongEnough(question) {
+            return (question && question.length > 5 && question.includes(" "))
         }
 
         async function submitQuestion() {
             const question = questionInput.value.trim();
-            if (!question) return;
+            if (!isLongEnough(question)) {
+                response = question ? "Enter a few words about that." : "Please type what's on your mind.";
+                displayResponse(questionInput.value, [], response);
+                return;
+            }
 
             submitBtn.disabled = true;
             responseStatus.innerHTML = '<div class="loading"><div class="spinner"><div></div>';
