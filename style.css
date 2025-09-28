@@ -12,7 +12,7 @@ body {
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4c64aa 0%, #2a5e74 100%);
     color: white;
     padding: 1rem 2rem;
     position: fixed;
@@ -95,30 +95,14 @@ body {
     color: #495057;
     text-decoration: none;
     border-bottom: 1px solid #e9ecef;
-    transition: all 0.3s ease;
     position: relative;
 }
 
 .menu-item:hover {
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #4c64aa, #2a5e74);
     color: white;
     transform: translateX(5px);
-}
-
-.menu-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(180deg, #667eea, #764ba2);
-    transform: scaleY(0);
     transition: transform 0.3s ease;
-}
-
-.menu-item:hover::before {
-    transform: scaleY(1);
 }
 
 /* Main Content */
@@ -168,13 +152,13 @@ body {
 
 .question-input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #4c64aa;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .submit-btn {
     padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4c64aa 0%, #2a5e74 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -196,7 +180,7 @@ body {
     padding: 1.5rem;
     background: #f8f9fa;
     border-radius: 8px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #4c64aa;
 }
 
 .response-area h3 {
@@ -209,14 +193,14 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    color: #667eea;
+    color: #4c64aa;
 }
 
 .spinner {
     width: 20px;
     height: 20px;
     border: 2px solid #e9ecef;
-    border-top: 2px solid #667eea;
+    border-top: 2px solid #4c64aa;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
