@@ -10,7 +10,7 @@ class History:
 class Chatter:
     def __init__(self):
         self.quote_db = QuoteDB()
-        #Support 100 concurrent sessions up to 1 day
+        #TODO: install memcached and use pylibmc instead of cachetools so this works with multiple instances
         self.context = cachetools.TTLCache(maxsize=100, ttl=60 * 60 * 24)
 
     def append_virtue(self, user_input, virtue):
@@ -30,7 +30,7 @@ class Chatter:
         genre = quote_data['Genre']
         source = quote_data['Source']
         quote = quote_data['Quote']
-        formatted_quote = f"{author} {"sang" if genre == "Song" else "said"} \"{quote}\""
+        formatted_quote = f"{author} {'sang' if genre == 'Song' else 'said'} \"{quote}\""
         if source and source[:4] != 'http' and source[:6] != 'Lesson':
             formatted_quote += f" ({source})"
         return formatted_quote

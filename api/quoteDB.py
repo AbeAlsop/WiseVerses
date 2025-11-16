@@ -16,7 +16,7 @@ COMBINED_INDEX_NAME = "wise-quotes-3"
 POP_INDEX_NAME = "wise-quotes-pop-3"
 FAITH_INDEX_NAME = "wise-quotes-faith-3"
 FAITH_GENRES = ["Saint","Bible","Christian","Song"]
-MIN_ID_TO_LOAD = 2142
+MIN_ID_TO_LOAD = 2165
 
 pinecone_client = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 pinecone_spec = ServerlessSpec(cloud="aws", region=AWS_REGION)
@@ -28,7 +28,7 @@ class QuoteDB:
         self.combined_index = self.get_or_create_index(COMBINED_INDEX_NAME)
 
     def load_quotes(self):
-        with open('C:/dev/wiseverses/quotes.csv', 'r', encoding='utf-8') as file:
+        with open(os.getenv("CSV_FILE_PATH"), 'r', encoding='utf-8') as file:
             quote_file = csv.reader(file)
             header = next(quote_file)
             quotes = []
@@ -42,7 +42,7 @@ class QuoteDB:
             return quotes
 
     def save_quotes_csv(self, data):
-        numpy.savetxt("C:/dev/wiseverses/quotes.csv", [[d['author'],d.get('source',''),d['text']] for d in data], delimiter="|", fmt="%s")
+        numpy.savetxt(os.getenv("CSV_FILE_PATH"), [[d['author'],d.get('source',''),d['text']] for d in data], delimiter="|", fmt="%s")
 
     def get_or_create_index(self, name):
         embed_dim = 1536
