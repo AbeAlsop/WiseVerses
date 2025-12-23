@@ -12,9 +12,9 @@ body {
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, #4c64aa 0%, #2a5e74 100%);
+    background: linear-gradient(135deg, #4c64aa 0%, #2a5e88 100%);
     color: white;
-    padding: 1rem 2rem;
+    padding: 13px 13px 0 0;
     position: fixed;
     top: 0;
     left: 0;
@@ -26,9 +26,17 @@ body {
     align-items: center;
 }
 
+.header .logo {
+    background-image: url('Socrates_head.png');
+    background-size: contain;
+    height: 117px;
+    width: 100px;
+}
+
 .header h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-family: 'Baskervville', Palatino, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 400;
     margin-left: 1rem;
 }
 
@@ -71,8 +79,8 @@ body {
 /* Container */
 .container {
     display: flex;
-    margin-top: 70px;
-    min-height: calc(100vh - 70px);
+    margin-top: 130px;
+    min-height: calc(100vh - 130px);
 }
 
 /* Sidebar */
@@ -99,7 +107,7 @@ body {
 }
 
 .menu-item:hover {
-    background: linear-gradient(90deg, #4c64aa, #2a5e74);
+    background: linear-gradient(90deg, #4c64aa, #2a5e88);
     color: white;
     transform: translateX(5px);
     transition: transform 0.3s ease;
@@ -285,11 +293,16 @@ body {
     }
 
     .header {
-        padding: 1rem;
+        padding: 8px 0 0 0;
     }
 
     .header h1 {
-        font-size: 1.2rem;
+        font-size: 1.6rem;
+    }
+
+    .header .logo {
+        height: 93px;
+        width: 80px;
     }
 }
 
