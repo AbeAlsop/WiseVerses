@@ -16,7 +16,7 @@ COMBINED_INDEX_NAME = "wise-quotes-3"
 POP_INDEX_NAME = "wise-quotes-pop-3"
 FAITH_INDEX_NAME = "wise-quotes-faith-3"
 FAITH_GENRES = ["Saint","Bible","Christian","Song"]
-MIN_ID_TO_LOAD = 2177
+MIN_ID_TO_LOAD = 2184
 
 pinecone_client = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 pinecone_spec = ServerlessSpec(cloud="aws", region=AWS_REGION)
