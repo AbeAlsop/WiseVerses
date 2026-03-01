@@ -13,6 +13,17 @@ def embed(text):
     result = open_ai_client.embeddings.create(input=text, model=EMBED_MODEL)
     return result.data
 
+def get_response(system, context, prompt):
+    messages = [{'role': 'system', 'content': system},{'role': 'user', 'content': prompt}]
+    for item in context:
+        messages.append({'role': 'assistant', 'content': item})
+    response = open_ai_client.chat.completions.create(
+        model=LANG_MODEL,
+        messages=messages,
+        max_completion_tokens=200
+    )
+    return response.choices[0].message.content
+
 #TODO: Find closest match from my descriptions of virtues, rather than asking OpenAI
 def get_virtue(text, context = []):
     messages = [
