@@ -15,7 +15,6 @@ location = "Boise Idaho"
 name = "Abraham Alsop"
 
 weather = get_weather(location, day)
-#weather = "On Tuesday, February 24, 2026 in Boise, Idaho, the weather was rainy with a high of 53 degrees Fahrenheit and a low of 41"
 
 news = get_news(location)
 news_headlines = f"Latest news headlines: {". ".join([article['title'] for article in news])}"
