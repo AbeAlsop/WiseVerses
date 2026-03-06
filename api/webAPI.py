@@ -40,16 +40,6 @@ class NotificationMessage(BaseModel):
     day: date
     location: str
 
-    @field_validator("day", mode="before")
-    @classmethod
-    def parse_date(cls, value: str) -> date:
-        if isinstance(value, date):
-            return value
-        try:
-            return date.fromisoformat(value)
-        except (ValueError, TypeError):
-            raise ValueError("date must be in 'yyyy-mm-dd' format (e.g. '2024-03-15')")
-
 @app.get("/")
 def read_root():
     return {"Description": "WiseVerses API v0.1"}
