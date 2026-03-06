@@ -2,10 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from chat import Chatter
+from daily_notification import get_notification
+
 from dotenv import load_dotenv
 import logging
 import os
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from datetime import date
 
 load_dotenv()
 log_file_path = os.getenv('LOG_FILE_PATH')
@@ -31,6 +34,22 @@ class ChatMessage(BaseModel):
     session: str
     message: str
 
+class NotificationMessage(BaseModel):
+    personal: str
+    name: str
+    day: date
+    location: str
+
+    @field_validator("day", mode="before")
+    @classmethod
+    def parse_date(cls, value: str) -> date:
+        if isinstance(value, date):
+            return value
+        try:
+            return date.fromisoformat(value)
+        except (ValueError, TypeError):
+            raise ValueError("date must be in 'yyyy-mm-dd' format (e.g. '2024-03-15')")
+
 @app.get("/")
 def read_root():
     return {"Description": "WiseVerses API v0.1"}
@@ -46,4 +65,9 @@ def post_response(prompt: ChatMessage):
     response = chat_bot.respond_with_context(prompt.message, prompt.session)
     quotes = " ".join([q['Quote'] for q in response['Quotes']])
     logging.info(f"Session: {prompt.session} | Received query: {prompt.message} | Quotes: {quotes} | Explanation: {response['Explanation']}")
+    return response
+
+@app.post("/notification")
+def post_notification(context: NotificationMessage):
+    response = get_notification(context.personal, context.name, context.day, context.location)
     return response
