@@ -1,5 +1,7 @@
 annotated-types>=0.7.0
 anyio>=4.9.0
+asyncio>=4.0.0
+catholic-mass-readings>=0.7.0
 certifi>=2025.4.26
 charset-normalizer>=3.4.2
 click>=8.2.1
@@ -12,6 +14,7 @@ httpcore>=1.0.9
 httpx>=0.28.1
 idna>=3.10
 jiter>=0.10.0
+newsdataapi>=0.1.30
 numpy>=2.2.6
 openai>=1.82.1
 packaging>=24.2
