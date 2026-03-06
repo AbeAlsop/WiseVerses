@@ -345,11 +345,6 @@
         </div>
 
         <div class="field">
-          <label for="date">Date</label>
-          <input type="date" id="date" name="date" required />
-        </div>
-
-        <div class="field">
           <label for="location">Location</label>
           <input type="text" id="location" name="location" placeholder="City or place" />
         </div>
@@ -359,11 +354,16 @@
           <textarea id="description" name="description" placeholder="Tell us a little about yourself" required></textarea>
         </div>
 
-      </div>
+        <div class="field">
+          <label for="date">Date</label>
+          <input type="date" id="date" name="date" required />
+        </div>
 
-      <div class="remember-wrap">
-        <input type="checkbox" id="remember-me" name="remember-me" />
-        <label for="remember-me">Remember me on this browser</label>
+        <div class="remember-wrap">
+          <input type="checkbox" id="remember-me" name="remember-me" />
+          <label for="remember-me">Remember&nbsp;me on&nbsp;this&nbsp;browser</label>
+        </div>
+
       </div>
 
       <div class="btn-wrap">
@@ -431,7 +431,7 @@
       const response = await fetch('https://wiseverses.com/api/notification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, description, location, date })
+        body: JSON.stringify({ 'personal': description, 'name': name, 'day': date, 'location': location.replace(/,/g, '') })
       });
 
       if (!response.ok) {
@@ -448,7 +448,6 @@
         const a = document.createElement('a');
         a.href = data.url;
         a.target = '_blank';
-        a.rel = 'noopener noreferrer';
         a.textContent = data.notification;
         notifText.innerHTML = '';
         notifText.appendChild(a);
