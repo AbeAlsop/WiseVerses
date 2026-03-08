@@ -286,6 +286,14 @@
       color: var(--gold);
     }
 
+    .disclaimer {
+        font-family: 'Playfair Display', serif;
+        font-size: 0.8rem;
+        margin-top: 28px;
+        font-style: italic;
+        color: var(--ink);
+    }
+
     /* Error */
     .error-box {
       background: #fff8f5;
@@ -449,6 +457,11 @@
         a.textContent = 'Click here to go to the readings';
         notifText.appendChild(a);
       }
+      const disclaimer = document.createElement('p');
+      disclaimer.classList.add('disclaimer');
+      disclaimer.textContent = 'Note: AI-generated message may contain mistakes.';
+      notifText.appendChild(disclaimer);
+
       resultSec.style.display = 'block';
       resultSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
