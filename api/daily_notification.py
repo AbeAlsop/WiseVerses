@@ -10,11 +10,11 @@ def get_notification(personal, name=None, day=None, location=None):
     if day is None:
         day = datetime.date.today()
 
-    weather = get_weather(location, day) if location is not None else None
+    weather = get_weather(location, day) if location else None
 
-    location = 'United States' if location is None else location.replace(',',' ')
+    location = 'United States' if not location else location.replace(',',' ')
 
-    personal_context = (f"Reader's name: {name}. " if name is not None else "") + f"Personal attributes: {personal}. Located in {location}"
+    personal_context = (f"Reader's name: {name}. " if name else "") + f"Personal attributes: {personal}. Located in {location}"
 
     news = get_news(location)
     news_headlines = f"Latest news headlines: {". ".join([article['title'] for article in news])}"
