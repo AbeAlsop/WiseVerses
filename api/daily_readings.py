@@ -9,19 +9,23 @@ from curl_cffi.requests.exceptions import HTTPError
 async def load_readings(day):
     async with USCCB() as usccb:
         try:
-            mass_types = await usccb.get_mass_types(day)
-            mass_type = MassType.DAY if MassType.DAY in mass_types else MassType.DEFAULT
+            #Avoid USCCB's bot blocking by skipping the first query and assuming DEFAULT
+            #mass_types = await usccb.get_mass_types(day)
+            mass_type = MassType.DEFAULT #MassType.DAY if MassType.DAY in mass_types else MassType.DEFAULT
             mass_data = await usccb.get_mass(day, mass_type)
             return mass_data
         except HTTPError as e:
-            if e.response.status_code == 404:
-                return f"No readings found for {day}"
+            message = f"No readings found for {day}" if e.response.status_code == 404 else f"Error {e.response.status_code}"
+            return {"code": e.response.status_code, "message": message}
 
 def transform_header(header):
     return 'First reading' if header == 'Reading 1' else 'Second reading' if header == 'Reading 2' else header
 
 def get_readings(day):
-    response = asyncio.run(load_readings(day)).to_dict()
+    response = asyncio.run(load_readings(day))
+    if isinstance(response,dict):
+        return response | {'url': 'No readings found', 'readings': 'No readings found'}
+    response = response.to_dict()
     reading_dict = {transform_header(r['header']): r['readings'][0]['text'] for r in response['sections']}
     return {'url': response['url'], 'readings': reading_dict}
 
